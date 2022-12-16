@@ -1,0 +1,183 @@
+@startuml
+skinparam groupInheritance 2
+class Users {
+    - userID: Integer {frozen} 
+    - firstName: String
+    - lastName: String
+    - email: String
+    - phoneNumber: String
+
+    +getUserID()
+    +setUserID(new userID)
+    +...()
+}
+
+Users "*" -- "*" Employee
+(Users, Employee) . Advised_by
+
+class Advised_by {
+    - proFeature: String
+
+    + getProFeature()
+    + setProFeature(new feature)
+}
+
+
+class Account {
+    - accountID: Integer {frozen}
+    - blance: Double
+
+    +getBlance()
+    +setBlance(new blance)
+    +...()
+}
+
+Users "1" *-- "*" Account:Create
+Account "*" -- "*" Product
+(Account, Product) . Purchase
+
+Account "*" -- "*" Account
+
+class Purchase {
+    - unitPrice: Double
+    - unitNum: Double
+
+    +getUnitPrice()
+    +setUnitPrice(new price)
+    +()...
+}
+
+class Checking extends Account{
+    - manageFeeMonth: Double
+
+    +getManageFee()
+    +setManageFee(double fee) 
+    +...()
+}
+
+class Saving extends Account {
+    - giftOrNot: Boolean
+    
+    +getGiftOrNot()
+    +setGiftOrNot(Boolean flag)
+    +...()
+}
+
+class CreditCard {
+    - cardID: Integer 
+    - accountID：Integer
+    - cost: Double
+    - limit: Double
+    - dueDate: Date
+    - return: Double
+    - /exitMoney: Double
+
+    +calExistMoney(double cost, double limit)
+    +...()
+}
+
+
+
+class Manager {
+    - managerID: Integer
+    - name: String
+    - contactInfo: String
+
+    +getName()
+    +setName(String contact)
+    +...()
+}
+
+class Supplier {
+    - supplierID: Integer
+    - name: String
+    - contactInfo: String
+
+    +getContactInfo()
+    +setContactInfo(String contact)
+    +...()
+}
+
+Supplier "1..*" -- "0..*" Manager
+Supplier "1..*" -- "1" Product: Provide
+(Supplier, Manager) . Negotiate
+
+class Negotiate {
+    - unitCost: Double
+    - unitAmount: Double
+
+    +getCost()
+    +setCost(new price)
+    +()...
+}
+
+class Employee {
+    - employeeID: Integer
+    - name: String
+    - contactInfo: String
+
+    +getcontactInfo()
+    +setcontactInfo(String contact)
+    +...()
+}
+
+Manager "1" -- "1..*" Employee:Manage
+
+class Department {
+    - departmentID: Integer
+    - name: String
+    - phoneNumber: Integer
+    - location: String
+
+    +getlocation()
+    +setlocaiton(String location)
+    +()...
+}
+
+Department "1" -- "1..*" Product: Require
+
+Employee "1..*" -- "1" Department:Work_in
+
+class Product{
+    - productID: Integer
+    - type: String
+    - cost: Double
+
+    +getType()
+    +setType(new type)
+    +()...
+}
+
+(Account, Saving) .. Specialization
+(Account, Checking) .. Specialization
+class Specialization {
+    isDisjoint = true
+    isTotal = true
+}
+
+Product <|-- Loan
+Product <|-- Invest
+Product <|-- Insurance
+
+
+(Product, Loan) .. SpecializationSet 
+(Product, Invest) .. SpecializationSet 
+(Product, Insurance) .. SpecializationSet 
+
+class SpecializationSet { 
+    isDisjoint = true 
+    isPartial = true 
+}
+' class Loan extends Product {
+
+' }
+
+' class Invest extends Product{
+
+' }
+
+' class Insurance extends Product{
+
+' }
+Account "cardID 1" -- "1..*" CreditCard : Apply
+@enduml
